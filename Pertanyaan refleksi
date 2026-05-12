@@ -1,0 +1,36 @@
+1. Mengapa power() dipanggil di dalam term(), bukan sebaliknya?
+Ini berkaitan langsung dengan Operator Precedence (Prioritas Operator).
+Aturannya: Operator dengan prioritas lebih tinggi harus berada lebih dalam di hierarki fungsi parser.
+
+expr()          →  menangani  +  -        (prioritas TERENDAH)
+  └── term()    →  menangani  *  /        (prioritas MENENGAH)
+        └── power()  →  menangani  ^      (prioritas TINGGI)
+              └── factor()  →  angka/var  (prioritas TERTINGGI)
+
+
+2. Apa yang terjadi jika variabel z tidak ada di symbol_table?
+Ini terjadi pada fase Analisis Semantik, tepatnya saat pengecekan scope & deklarasi variabel.
+Alur prosesnya:
+Kode sumber: "x + z * 2"
+                    ↓
+         Lexer → token: [x, +, z, *, 2]
+                    ↓
+         Parser → bangun AST
+                    ↓
+    Analisis Semantik → cek setiap Var node
+         → "x" ada di symbol_table? ✅
+         → "z" ada di symbol_table? ❌
+                    ↓
+         raise ParserError / SemanticError
+Pada kode MiniCompiler di tugas, pengecekan ini sudah ada di fungsi factor():
+elif token and token.isalpha():
+    if token not in self._env:          # ← inilah analisis semantik
+        raise ParserError(f"Semantic Error: Undefined variable '{token}'")
+
+
+3. Mengapa instruksi TAC untuk a ^ 2 harus muncul sebelum +?
+Ini berkaitan dengan prinsip TAC (Three-Address Code) — setiap instruksi hanya boleh menggunakan nilai yang sudah dihitung sebelumnya.
+Contoh ekspresi: b + a ^ 2
+TAC yang benar (urutan topologis dari AST):
+t1 = a ^ 2       ← hitung pangkat dulu
+t2 = b + t1      ← baru bisa pakai hasilnya
