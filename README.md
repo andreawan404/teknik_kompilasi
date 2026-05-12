@@ -1,6 +1,20 @@
 # teknik_kompilasi
 UTS Teknik Kompilasi - Unpam 2026
 
-Nama  : Aan Andreawan
-NIM   : 231011400114
-Kelas : 06TPLE003
+<table>
+  <tr>
+    <td>Nama</td>
+    <td>:</td>
+    <td>Aan Andreawan</td>
+  </tr>
+  <tr>
+    <td>NIM</td>
+    <td>:</td>
+    <td>231011400114</td>
+  </tr>
+  <tr>
+    <td>Kelas</td>
+    <td>:</td>
+    <td>06TPLE003</td>
+  </tr>
+</table>
